@@ -21,7 +21,7 @@ app = FastAPI(title="Company Research API")
 # This allows your frontend JS application to interact with your FastAPI endpoints
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://ai-powered-company-researcher.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

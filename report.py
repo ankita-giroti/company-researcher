@@ -2,27 +2,27 @@ import os
 from fpdf import FPDF
 from extract import CompanyProfile
 
-FONT_DIR = "/usr/share/fonts/truetype/liberation"
-FONT_REGULAR = os.path.join(FONT_DIR, "LiberationSans-Regular.ttf")
-FONT_BOLD = os.path.join(FONT_DIR, "LiberationSans-Bold.ttf")
+FONT_DIR = "/usr/share/fonts/truetype/arial"
+# FONT_REGULAR = os.path.join(FONT_DIR, "arialSans-Regular.ttf")
+# FONT_BOLD = os.path.join(FONT_DIR, "arialSans-Bold.ttf")
 
 
 class ReportPDF(FPDF):
     def __init__(self):
         super().__init__()
-        self.add_font("Liberation", "", FONT_REGULAR)
-        self.add_font("Liberation", "B", FONT_BOLD)
+        # self.add_font("arial", "", FONT_REGULAR)
+        # self.add_font("arial", "B", FONT_BOLD)
 
     def header(self):
-        self.set_font("Liberation", "B", 14)
+        self.set_font("arial", "B", 14)
         self.cell(0, 10, "Company Research Report", ln=True, align="C")
         self.ln(4)
 
 
 def _section(pdf: FPDF, title: str, body):
-    pdf.set_font("Liberation", "B", 12)
+    pdf.set_font("arial", "B", 12)
     pdf.cell(0, 8, title, ln=True)
-    pdf.set_font("Liberation", "", 10)
+    pdf.set_font("arial", "", 10)
     if isinstance(body, list):
         body = "\n".join(f"- {b}" for b in body) if body else "N/A"
     pdf.multi_cell(0, 6, body or "N/A")
@@ -32,7 +32,7 @@ def _section(pdf: FPDF, title: str, body):
 def build_pdf(profile: CompanyProfile, out_path: str):
     pdf = ReportPDF()
     pdf.add_page()
-    pdf.set_font("Liberation", "B", 16)
+    pdf.set_font("arial", "B", 16)
     pdf.cell(0, 10, profile.name, ln=True)
     pdf.ln(2)
 

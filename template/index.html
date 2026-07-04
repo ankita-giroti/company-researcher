@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Report Generator</title>
+  
+  <!-- Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="chat-container">
+    
+    <!-- Main Conversation / Display Area -->
+    <main class="conversation">
+      
+      <!-- Hero / Welcome Message -->
+      <div class="assistant-message hero">
+        <h1>Generate Company Research Report</h1>
+        <p>Enter a company name or website below to generate a professional PDF report.</p>
+      </div>
+
+      <!-- User Prompt Echo -->
+      <div id="userPrompt" class="user-message" hidden></div>
+
+      <!-- Loading / Status State -->
+      <div id="statusRow" class="assistant-message loading" hidden>
+        <div class="spinner"></div>
+        <span id="statusText">Generating your report…</span>
+      </div>
+
+      <!-- Error State -->
+      <div id="errorBox" class="assistant-message error" hidden></div>
+
+      <!-- Success / Result State -->
+      <div id="resultBox" class="assistant-message success" hidden>
+        <strong>✓ Report ready</strong>
+        <div class="result-actions">
+          <a id="previewLink" class="action-secondary">Preview</a>
+          <button id="downloadBtn" class="action-primary">Download PDF</button>
+        </div>
+      </div>
+      
+    </main>
+
+    <!-- Footer / Input Controls -->
+    <footer class="input-area">
+      <!-- Wrapped in a form so pressing 'Enter' naturally triggers the submission -->
+      <form id="reportForm" class="prompt-box" onsubmit="event.preventDefault();">
+        <input 
+          type="text" 
+          id="subjectInput" 
+          class="field-input" 
+          placeholder="Enter company name or website URL..." 
+          required
+          autocomplete="off"
+        >
+        <button type="submit" id="submitBtn" class="btn">
+          <span id="submitBtnLabel">↑</span>
+        </button>
+      </form>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

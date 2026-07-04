@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get update \
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y google-chrome-stable chromium-driver \
 
 RUN fc-list | grep -i liberation
 

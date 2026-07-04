@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -15,17 +18,19 @@ RUN apt-get update && apt-get install -y \
     libgbm1 \
     libasound2 \
     ca-certificates \
-    && apt-get install -y google-chrome-stable chromium-driver \
-    && wget -q -O /usr/share/keyrings/google-chrome-keyring.gpg.tmp https://dl.google.com/linux/linux_signing_key.pub \
+    && rm -rf /var/lib/apt/lists/*
+
+# Add Google Chrome's official repo using the modern signed-by keyring method
+RUN wget -q -O /usr/share/keyrings/google-chrome-keyring.gpg.tmp https://dl.google.com/linux/linux_signing_key.pub \
     && gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg /usr/share/keyrings/google-chrome-keyring.gpg.tmp \
     && rm /usr/share/keyrings/google-chrome-keyring.gpg.tmp \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
-    
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 
-RUN fc-list | grep -i liberation
+# Refresh apt sources AFTER adding the Chrome repo, then install Chrome + matching driver
+RUN apt-get update && apt-get install -y \
+    google-chrome-stable \
+    chromium-driver \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

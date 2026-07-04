@@ -6,12 +6,13 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 from dotenv import load_dotenv
-
-# Importing tools from your local codebase
 from search import find_company_sources
 from crawler import _crawl_all  # Code 2 relies on this async worker
 from extract import extract_profile
 from report import build_pdf
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 load_dotenv()
 
@@ -68,6 +69,7 @@ async def research_company(payload: ResearchRequest):
     except HTTPException:
         raise
     except Exception as e:
+        logger.exception("Error during /research")   # <-- logs full traceback to Render logs
         raise HTTPException(500, str(e))
 
 @app.get("/research/{safe_name}/pdf")

@@ -50,7 +50,7 @@ async def bound_crawl(url):
             if user_data_dir:
                 shutil.rmtree(user_data_dir, ignore_errors=True)
 
-def crawl_page(driver, url: str, wait: float = 2.5) -> str:
+def crawl_page(driver, url: str, wait: float = 1.5) -> str:
     try:
         driver.get(url)
         time.sleep(wait) # let JS render; swap for WebDriverWait on real selectors
@@ -62,7 +62,7 @@ def crawl_page(driver, url: str, wait: float = 2.5) -> str:
     except Exception as e:
         return f"[ERROR crawling {url}: {e}]"
     
-async def _crawl_all(urls: list[str], concurrency: int = 2) -> dict[str, str]:
+async def _crawl_all(urls: list[str], concurrency: int = 4) -> dict[str, str]:
     pages = {}
     semaphore = asyncio.Semaphore(concurrency)
 

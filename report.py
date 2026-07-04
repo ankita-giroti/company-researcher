@@ -1,37 +1,45 @@
+import os
 from fpdf import FPDF
 from extract import CompanyProfile
 
-FONT_REGULAR = "C:\Windows\Fonts\/arial.ttf"
-FONT_BOLD = "C:\Windows\Fonts\/arialbd.ttf"
+# fpdf2 ships DejaVuSans inside its own installed package — no manual download needed.
+import fpdf
+FPDF_FONT_DIR = os.path.join(os.path.dirname(fpdf.__file__), "font", "ttf")
+FONT_REGULAR = os.path.join(FPDF_FONT_DIR, "DejaVuSans.ttf")
+FONT_BOLD = os.path.join(FPDF_FONT_DIR, "DejaVuSansB.ttf") if os.path.exists(
+    os.path.join(FPDF_FONT_DIR, "DejaVuSansB.ttf")
+) else FONT_REGULAR
 
 
 class ReportPDF(FPDF):
     def __init__(self):
         super().__init__()
-        self.add_font("Arial", "", FONT_REGULAR)
-        self.add_font("Arial", "B", FONT_BOLD)
+        self.add_font("DejaVu", "", FONT_REGULAR)
+        self.add_font("DejaVu", "B", FONT_BOLD)
 
     def header(self):
-        self.set_font("Arial", "B", 14)
+        self.set_font("DejaVu", "B", 14)
         self.cell(0, 10, "Company Research Report", ln=True, align="C")
         self.ln(4)
-    
-def _section(pdf: FPDF, title: str, body: str | list[str]):
-    pdf.set_font("Arial", "B", 12)
+
+
+def _section(pdf: FPDF, title: str, body):
+    pdf.set_font("DejaVu", "B", 12)
     pdf.cell(0, 8, title, ln=True)
-    pdf.set_font("Arial", "", 10)
+    pdf.set_font("DejaVu", "", 10)
     if isinstance(body, list):
         body = "\n".join(f"- {b}" for b in body) if body else "N/A"
     pdf.multi_cell(0, 6, body or "N/A")
     pdf.ln(3)
-    
+
+
 def build_pdf(profile: CompanyProfile, out_path: str):
     pdf = ReportPDF()
     pdf.add_page()
-    pdf.set_font("Arial", "B", 16)
+    pdf.set_font("DejaVu", "B", 16)
     pdf.cell(0, 10, profile.name, ln=True)
     pdf.ln(2)
-    
+
     _section(pdf, "Summary", profile.summary or "N/A")
     _section(pdf, "Industry", profile.industry or "N/A")
     _section(pdf, "Headquarters", profile.hq_location or "N/A")
@@ -42,5 +50,5 @@ def build_pdf(profile: CompanyProfile, out_path: str):
     _section(pdf, "Funding", profile.funding_summary or "N/A")
     _section(pdf, "Recent News", profile.recent_news)
     _section(pdf, "Competitors", profile.competitors)
-    
+
     pdf.output(out_path)

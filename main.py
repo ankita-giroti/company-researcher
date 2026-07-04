@@ -49,7 +49,7 @@ async def research_company(payload: ResearchRequest):
             raise HTTPException(404, "No sources found")
         
         # 2. Slice sources down and call your fast concurrent crawler
-        urls = [s["url"] for s in sources[:8]]
+        urls = [s["url"] for s in sources[:3]]
         pages = await _crawl_all(urls) # Concurrent processing from crawler.py
         
         # 3. Analyze text with LLM structure

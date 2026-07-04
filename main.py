@@ -1,16 +1,17 @@
 import os
 import re
+import uuid
+import logging
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel
 from dotenv import load_dotenv
 from search import find_company_sources
-from crawler import _crawl_all  # Code 2 relies on this async worker
+from crawler import _crawl_all 
 from extract import extract_profile
 from report import build_pdf
-import logging
 
 logger = logging.getLogger("uvicorn.error")
 

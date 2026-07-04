@@ -3,7 +3,8 @@ import re
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field, field_validator
 from dotenv import load_dotenv
 
 # Importing tools from your local codebase
@@ -20,7 +21,7 @@ app = FastAPI(title="Company Research API")
 # This allows your frontend JS application to interact with your FastAPI endpoints
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, swap "*" for your explicit frontend URL like ["http://127.0.0.1:5500"]
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -79,3 +80,5 @@ def get_pdf(safe_name: str):
         media_type="application/pdf", 
         filename=f"{safe_name}_report.pdf"
     )
+
+app.mount("/", StaticFiles(directory="template", html=True), name="static")

@@ -1,9 +1,9 @@
 import os, json
 from openai import OpenAI
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
+    base_url="https://openrouter.ai/api/v1/",
     api_key=os.environ["OPENROUTER_API_KEY"],
 )
 
@@ -19,6 +19,11 @@ class CompanyProfile(BaseModel):
     recent_news: list[str] = Field(default_factory=list)
     competitors: list[str] = Field(default_factory=list)
     summary: str | None = None
+
+    @field_validator("products_services", "key_people", "recent_news", "competitors", mode="before")
+    @classmethod
+    def null_to_empty_list(cls, v):
+        return [] if v is None else v
 
 SCHEMA_HINT = CompanyProfile.model_json_schema()
 

@@ -1,17 +1,25 @@
 from fpdf import FPDF
 from extract import CompanyProfile
 
+FONT_REGULAR = "C:\Windows\Fonts\/arial.ttf"
+FONT_BOLD = "C:\Windows\Fonts\/arialbd.ttf"
+
 
 class ReportPDF(FPDF):
+    def __init__(self):
+        super().__init__()
+        self.add_font("Arial", "", FONT_REGULAR)
+        self.add_font("Arial", "B", FONT_BOLD)
+
     def header(self):
-        self.set_font("Helvetica", "B", 14)
+        self.set_font("Arial", "B", 14)
         self.cell(0, 10, "Company Research Report", ln=True, align="C")
         self.ln(4)
     
 def _section(pdf: FPDF, title: str, body: str | list[str]):
-    pdf.set_font("Helvetica", "B", 12)
+    pdf.set_font("Arial", "B", 12)
     pdf.cell(0, 8, title, ln=True)
-    pdf.set_font("Helvetica", "", 10)
+    pdf.set_font("Arial", "", 10)
     if isinstance(body, list):
         body = "\n".join(f"- {b}" for b in body) if body else "N/A"
     pdf.multi_cell(0, 6, body or "N/A")
@@ -20,7 +28,7 @@ def _section(pdf: FPDF, title: str, body: str | list[str]):
 def build_pdf(profile: CompanyProfile, out_path: str):
     pdf = ReportPDF()
     pdf.add_page()
-    pdf.set_font("Helvetica", "B", 16)
+    pdf.set_font("Arial", "B", 16)
     pdf.cell(0, 10, profile.name, ln=True)
     pdf.ln(2)
     

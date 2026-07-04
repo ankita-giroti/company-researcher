@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     libgbm1 \
     libasound2 \
     ca-certificates \
+    && apt-get install -y google-chrome-stable chromium-driver \
     && wget -q -O /usr/share/keyrings/google-chrome-keyring.gpg.tmp https://dl.google.com/linux/linux_signing_key.pub \
     && gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg /usr/share/keyrings/google-chrome-keyring.gpg.tmp \
     && rm /usr/share/keyrings/google-chrome-keyring.gpg.tmp \
@@ -22,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get update \
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
-    && apt-get install -y google-chrome-stable chromium-driver \
+    
 
 RUN fc-list | grep -i liberation
 

@@ -29,7 +29,7 @@ def build_driver():
     return webdriver.Chrome(service=Service(CHROMEDRIVER_PATH), options=opts)
 
 
-def crawl_page(driver, url: str, wait: float = 2.5) -> str:
+def crawl_page(driver, url: str, wait: float = 1.0) -> str:
     try:
         driver.get(url)
         time.sleep(wait)
@@ -42,7 +42,7 @@ def crawl_page(driver, url: str, wait: float = 2.5) -> str:
         return f"[ERROR crawling {url}: {e}]"
 
 
-async def _crawl_all(urls: list[str], concurrency: int = 4) -> dict[str, str]:
+async def _crawl_all(urls: list[str], concurrency: int = 2) -> dict[str, str]:
     pages = {}
     semaphore = asyncio.Semaphore(concurrency)
 

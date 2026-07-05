@@ -51,7 +51,7 @@ async def run_research_job(job_id: str, query: str):
             JOBS[job_id] = {"status": "error", "error": "No sources found"}
             return
  
-        urls = [s["url"] for s in sources[:4]]
+        urls = [s["url"] for s in sources[:2]]
         pages = await _crawl_all(urls)
  
         JOBS[job_id]["status"] = "extracting"
